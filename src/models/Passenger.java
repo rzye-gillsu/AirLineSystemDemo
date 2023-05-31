@@ -6,18 +6,11 @@ import java.util.List;
 public class Passenger {
     private String username;
     private String password;
-    private int charge = 0;
+    private int charge;
     private List<Ticket> tickets;
-
-    public Passenger(String username, String password, int charge, List<Ticket> tickets) {
-        this.username = username;
-        this.password = password;
-        this.charge = charge;
-        this.tickets = tickets;
-    }
-
     public Passenger() {
         this.tickets = new ArrayList<>();
+        charge = 0;
     }
 
     public int getCharge() {
@@ -25,7 +18,7 @@ public class Passenger {
     }
 
     public void setCharge(int charge) {
-        this.charge += charge;
+        this.charge = charge;
     }
 
     public List<Ticket> getTickets() {
@@ -50,5 +43,10 @@ public class Passenger {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%20s%20s%20d", username, password, charge);
     }
 }

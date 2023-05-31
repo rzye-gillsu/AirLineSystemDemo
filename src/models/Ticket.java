@@ -1,24 +1,34 @@
 package models;
 
+import java.util.Random;
+
 public class Ticket {
     private String ticketId;
     private String flightId;
-    private Passenger passenger;
-    private static int PASSENGER = 0;
+    private String username;
+
+    Random random = new Random(System.currentTimeMillis());
 
     public Ticket() {}
 
-    public Ticket(String ticketId, String flightId) {
-        this.ticketId = ticketId;
+    public Ticket(String flightId, String username) {
         this.flightId = flightId;
+        this.username = username;
+        createTicketId();
     }
 
     public String getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(String flightId) {
-        this.ticketId = passenger.getUsername() + PASSENGER++ + flightId;
+    public void setTicketId(String ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public void createTicketId() {
+        this.ticketId = username + "_" +
+                (random.nextInt(100) + String.valueOf(random.nextInt(100)) + random.nextInt(100))
+                + "_" + flightId;
     }
 
     public String getFlightId() {
@@ -27,5 +37,18 @@ public class Ticket {
 
     public void setFlightId(String flightId) {
         this.flightId = flightId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%20s%20s%20s", username, ticketId, flightId);
     }
 }

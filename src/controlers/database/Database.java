@@ -4,14 +4,13 @@ import java.io.IOException;
 
 public interface Database<T> {
     int FIX = 20;
-    int FIXED_SIZE = FIX * 2;
 
     void writeRecord(String str) throws IOException;
     T readRecord(T t) throws IOException;
 
     void writeString(String username) throws IOException;
 
-    boolean search(String str) throws IOException;
+    boolean search(String str, long pos) throws IOException;
 
 //    void update(String str, String state) throws IOException;
 

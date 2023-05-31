@@ -23,12 +23,12 @@ public class FlightsFile implements Database<Flight> {
 
     private File f;
     private RandomAccessFile file;
-    public static int SIZE_OF_RECORD = 141; // 20 * 7 + 1
+    public final static int SIZE_OF_RECORD = 141; // 20 * 7 + 1
 
     private FlightsFile() throws IOException {
         f = new File("flights.txt");
         f.createNewFile();
-        file = new RandomAccessFile(f, "rw");
+        file = new RandomAccessFile(f, "rwd");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FlightsFile implements Database<Flight> {
     }
 
     @Override
-    public boolean search(String str) throws IOException {
+    public boolean search(String str, long pos) throws IOException {
         // naiveSearch
         file.seek(0);
         String line;
@@ -69,17 +69,29 @@ public class FlightsFile implements Database<Flight> {
 //         seek cursor is not set.
 
         // reverseSearch
-//        long pos = file.length() - FIX; // 40
-//        while (pos >= 0) {
-//            file.seek(pos);
+//        file.seek(0);
+//        while (file.getFilePointer() < file.length()) {
 //            byte[] bytes = new byte[FIX];
 //            file.read(bytes);
-//            if (new String(bytes).equals(str)) {
+//            if ((new String(bytes)).trim().equals(str)) {
+//                file.seek(file.getFilePointer() - FIX);
 //                return true;
 //            }
-//            pos -= FIX; // 40
 //        }
 //        return false;
+    }
+
+    public boolean search2(String str) throws IOException {
+        file.seek(0);
+        while (file.getFilePointer() < file.length()) {
+            byte[] bytes = new byte[FIX];
+            file.read(bytes);
+            if ((new String(bytes)).trim().equals(str)) {
+                file.seek(file.getFilePointer() - FIX);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -111,6 +123,7 @@ public class FlightsFile implements Database<Flight> {
     @Override
     public void removeRecord(String flightId) throws IOException {
         long currentPos = file.getFilePointer();
+        System.out.println(currentPos);
         String flights = readRecords(currentPos + SIZE_OF_RECORD);
         file.seek(currentPos);
         file.writeBytes(flights);

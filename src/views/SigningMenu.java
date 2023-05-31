@@ -3,6 +3,9 @@ package views;
 import java.util.Scanner;
 
 public class SigningMenu {
+    private static SigningMenu instance = new SigningMenu();
+    public static SigningMenu getInstance() { return instance; }
+    private SigningMenu() {}
     private Scanner input = new Scanner(System.in);
     public String menu() {
         System.out.print("""
@@ -27,11 +30,17 @@ public class SigningMenu {
         return input.next();
     }
 
+    // what is the message appearing after signing out from the admin menu.
     public void messages(int messageNumber) {
         switch (messageNumber) {
-            case 0 -> System.out.println("You are predefined. Sign in to continue...");
-            case 1 -> System.out.println("\n!!!Password must contain at least 4 characters. Try it again.");
+            case 0 -> System.out.println("\n!!!You are predefined. Sign in to continue...\n");
+            case 1 -> System.out.println("\n!!!Password must contain at least 4 characters. Try it again.\n");
             case 2 -> System.out.println("\nWelcome back Admin!\n");
+            case 3 -> System.out.println("\n!!! Passenger with given username and password is not found!\n");
         }
+    }
+
+    public void welcomeUser(String username) {
+        System.out.printf("\nWelcome dear %s!\n\n", username);
     }
 }

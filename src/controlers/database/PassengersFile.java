@@ -7,38 +7,60 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class PassengersFile implements Database<Passenger> {
+    public final static int SIZE_OF_RECORD = 61; // 3 * 20 + 1
+
+    private static final PassengersFile instance;
+
+    static {
+        try {
+            instance = new PassengersFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static PassengersFile getInstance() {
+        return instance;
+    }
     private File f;
     private RandomAccessFile file;
 
-    public PassengersFile() throws IOException {
+    private PassengersFile() throws IOException {
         f = new File("passengers.txt");
         f.createNewFile();
-        file = new RandomAccessFile(f, "rw");
+        file = new RandomAccessFile(f, "rwd");
     }
 
     @Override
     public void writeRecord(String passenger) throws IOException {
-        long pos = file.getFilePointer();
-        if (!search(String.format("%20s", "X")))
-            file.seek(pos);
-        // not really sure if it's working correctly.
-        writeString(passenger);
-        writeString("\n");
+        file.writeBytes(passenger);
+        file.writeByte('\n');
     }
 
     @Override
-    public Passenger readRecord(Passenger passenger) {
-        return null;
+    public Passenger readRecord(Passenger passenger) throws IOException {
+        passenger.setUsername(readFixedString());
+        passenger.setPassword(readFixedString());
+        passenger.setCharge(Integer.parseInt(readFixedString().trim()));
+        file.readLine();
+        return passenger;
     }
 
     @Override
     public void writeString(String str) throws IOException {
-        file.writeChars(fixStringToWrite(str));
+        file.writeBytes(fixStringToWrite(str));
     }
 
     @Override
-    public boolean search(String state) throws IOException {
-        return true;
+    public boolean search(String str, long pos) throws IOException {
+        file.seek(0);
+        String line;
+        while ((line = file.readLine()) != null)
+            if (line.contains(str)) {
+                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                return true;
+            }
+        return false;
     }
 
 //    @Override
@@ -84,15 +106,13 @@ public class PassengersFile implements Database<Passenger> {
 
     @Override
     public String readFixedString() throws IOException {
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < FIX; i++) {
-            str.append(file.readChar());
-        }
-        return str.toString();
+        byte[] bytes = new byte[FIX];
+        file.read(bytes);
+        return new String(bytes);
     }
 
     @Override
     public void close() throws IOException {
-
+        file.close();
     }
 }

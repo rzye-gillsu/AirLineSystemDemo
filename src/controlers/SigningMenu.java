@@ -1,13 +1,15 @@
 package controlers;
 
+import controlers.database.Database;
 import controlers.database.FlightsFile;
+import controlers.database.PassengersFile;
+import models.Passenger;
 
 import java.io.IOException;
 
 public class SigningMenu {
-    private views.SigningMenu signingMenu = new views.SigningMenu();
-    PassengerControl passengerControl = new PassengerControl();
-    AdminControl adminControl = new AdminControl();
+    private views.SigningMenu signingMenu = views.SigningMenu.getInstance();
+    PassengersFile passengersFile = PassengersFile.getInstance();
 
     public SigningMenu() throws InterruptedException, IOException {
         exit:
@@ -25,6 +27,7 @@ public class SigningMenu {
             }
         }
         FlightsFile.getInstance().close();
+        PassengersFile.getInstance().close();
         Thread.sleep(500);
         System.exit(0);
     }
@@ -32,8 +35,10 @@ public class SigningMenu {
     private void signingUp() throws IOException {
         String username = signingMenu.username();
         String password = signingMenu.password();
+        passengersFile.setSeek(passengersFile.length());
         if (userIsValid(username, password)) {
-            passengerControl.addPassenger(username, password);
+            passengersFile.writeRecord(String.format("%20s", username).concat(String.format("%20s", password))
+                    .concat(String.format("%20d", 0)));
         }
     }
 
@@ -59,7 +64,17 @@ public class SigningMenu {
     private void checkSignIn(String username, String password) throws IOException {
         if (username.equals("Admin") && password.equals("Admin")) {
             signingMenu.messages(2);
-            adminControl.menu();
+            (new AdminControl()).menu();
+            return;
+        }
+        Passenger passenger = new Passenger();
+        String user = String.format("%20s", username).concat(String.format("%20s", password));
+        if (passengersFile.search(user, 0)) {
+            signingMenu.welcomeUser(username);
+            passenger = passengersFile.readRecord(passenger);
+            (new PassengerControl()).menu(passenger);
+        } else {
+            signingMenu.messages(3);
         }
     }
 }

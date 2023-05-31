@@ -62,7 +62,7 @@ public class AdminControl {
         isFalse = false;
         flight.append(check);
         while (!isFalse) {
-            check = String.format("%20s", adminMenu.price());
+            check = String.format("%20s", adminMenu.seat());
             isFalse = InputHandler.getInstance().isInteger(check.trim());
         }
         flight.append(check);
@@ -73,7 +73,7 @@ public class AdminControl {
     private void update() throws IOException {
         String flightId = adminMenu.flightIdToUpdate();
         Flight flight = new Flight();
-        if (!flightsFile.search(String.format("%20s", flightId)))
+        if (!flightsFile.search(String.format("%20s", flightId), 0))
             adminMenu.messages(0);
         else {
             flight = flightsFile.readRecord(flight);
@@ -130,8 +130,8 @@ public class AdminControl {
 
     private void remove() throws IOException {
         String flightId = adminMenu.remove();
-        System.out.println(flightsFile.search(flightId));
-        if (flightsFile.search(flightId))
+//        System.out.println(flightsFile.search(flightId));
+        if (flightsFile.search(flightId, 0))
             flightsFile.removeRecord(String.format("%20s", flightId));
         else
             adminMenu.messages(0);
