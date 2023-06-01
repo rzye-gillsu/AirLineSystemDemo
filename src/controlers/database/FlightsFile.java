@@ -27,7 +27,7 @@ public class FlightsFile implements Database<Flight> {
 
     private FlightsFile() throws IOException {
         f = new File("flights.txt");
-        f.createNewFile();
+        f.createNewFile(); // how to use createNewFile() ?
         file = new RandomAccessFile(f, "rwd");
     }
 
@@ -157,11 +157,6 @@ public class FlightsFile implements Database<Flight> {
 
     @Override
     public String readFixedString() throws IOException {
-//        StringBuilder str = new StringBuilder();
-//        for (int i = 0; i < FIX; i++) {
-//            str.append(file.readByte());
-//        }
-//        return str.toString();
         byte[] bytes = new byte[FIX];
         file.read(bytes);
         return new String(bytes);

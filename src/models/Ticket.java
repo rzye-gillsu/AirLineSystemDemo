@@ -26,9 +26,13 @@ public class Ticket {
     }
 
     public void createTicketId() {
-        this.ticketId = username + "_" +
-                (random.nextInt(100) + String.valueOf(random.nextInt(100)) + random.nextInt(100))
-                + "_" + flightId;
+        this.ticketId = username + "_" + generate6DigitNumber() + "_" + flightId;
+    }
+
+    private String generate6DigitNumber() {
+        StringBuilder num = new StringBuilder();
+        for (int i = 0; i < 6; i++) num.append(random.nextInt(9));
+        return num.toString();
     }
 
     public String getFlightId() {

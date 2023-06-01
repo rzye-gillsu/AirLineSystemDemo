@@ -1,2 +1,2 @@
-                   q                qqqq             2000000
-                   r                rrrr             7000000
+                   q                qqqq             8677668
+                   r                rrrr             6000000

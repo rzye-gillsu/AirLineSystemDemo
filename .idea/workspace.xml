@@ -2,21 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f6aad3a-c084-426b-9541-c45a82f37a11" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/controlers/TicketControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flights.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/passengers.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlers/AdminControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/AdminControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flights.txt" beforeDir="false" afterPath="$PROJECT_DIR$/flights.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/passengers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/passengers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controlers/PassengerControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/PassengerControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlers/SigningMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/SigningMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlers/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/database/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controlers/TicketControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/TicketControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controlers/database/FlightsFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/database/FlightsFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlers/database/PassengersFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/database/PassengersFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controlers/database/TicketsFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controlers/database/TicketsFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Passenger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Passenger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Ticket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/PassengerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PassengerMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/SigningMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/SigningMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tickets.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +99,8 @@
       <workItem from="1685516655536" duration="5288000" />
       <workItem from="1685539987769" duration="3085000" />
       <workItem from="1685547233994" duration="4309000" />
+      <workItem from="1685594852248" duration="3316000" />
+      <workItem from="1685601230972" duration="4048000" />
     </task>
     <servers />
   </component>

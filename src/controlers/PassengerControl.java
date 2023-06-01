@@ -1,8 +1,6 @@
 package controlers;
 
 import controlers.database.PassengersFile;
-import controlers.database.TicketsFile;
-import models.Flight;
 import models.Passenger;
 import views.PassengerMenu;
 
@@ -64,11 +62,11 @@ public class PassengerControl {
     }
 
     private void bookTicket() throws IOException {
-        ticketControl.makeNewTicket(passenger, passengerMenu.getFlightId("flightId"));
+        ticketControl.makeNewTicket(passengerMenu.getId("flightId"));
     }
 
     private void cancelTicket() throws IOException {
-        String ticketId = passengerMenu.getFlightId("ticketId");
+        String ticketId = passengerMenu.getId("ticketId");
         ticketControl.ticketCancellation(ticketId);
     }
 

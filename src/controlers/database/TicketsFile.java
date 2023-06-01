@@ -41,10 +41,14 @@ public class TicketsFile implements Database<Ticket> {
 
     @Override
     public Ticket readRecord(Ticket ticket) throws IOException {
-        ticket.setUsername(readFixedString());
-        ticket.setTicketId(readFixedString());
-        ticket.setFlightId(readFixedString());
+        ticket.setUsername(readFixedString().trim());
+//            System.out.println(file.getFilePointer());
+        ticket.setTicketId(readFixedString().trim());
+//            System.out.println(file.getFilePointer());
+        ticket.setFlightId(readFixedString().trim());
+//            System.out.println(file.getFilePointer());
         file.readLine();
+//            System.out.println(file.getFilePointer());
         return ticket;
     }
 
@@ -55,7 +59,7 @@ public class TicketsFile implements Database<Ticket> {
 
     @Override
     public boolean search(String str, long pos) throws IOException {
-        // a problem with contains key that i have is that if you enter yaz it counts yazd as well.
+        // a problem with contains key that I have is that if you enter yaz it counts yazd as well.
         // one way to solve the issue and yet using contains method is to add spaces before and after the input.
         file.seek(pos);
         String line;
@@ -68,19 +72,19 @@ public class TicketsFile implements Database<Ticket> {
     }
 
     @Override
-    public String readRecords(long seek, int n) throws IOException {
+    public String readRecords(long seek, int numberOfRecordsToBeDeleted) throws IOException {
         file.seek(seek);
         StringBuilder tickets = new StringBuilder();
         Ticket ticket = new Ticket();
-        if (n == -1) {
+        if (numberOfRecordsToBeDeleted == -1) {
             while (file.getFilePointer() < file.length()) {
                 tickets.append(readRecord(ticket).toString());
                 tickets.append("\n");
             }
-        } else if (n > 0) {
-            while (n > 0) {
+        } else if (numberOfRecordsToBeDeleted > 0) {
+            while (numberOfRecordsToBeDeleted > 0) {
                 tickets.append(readRecord(ticket).toString());
-                n--;
+                numberOfRecordsToBeDeleted--;
             }
         } else {
             return null;
@@ -96,7 +100,6 @@ public class TicketsFile implements Database<Ticket> {
     @Override
     public void removeRecord(String str) throws IOException {
         long currentPos = file.getFilePointer();
-        System.out.println(currentPos);
         String tickets = readRecords(currentPos + SIZE_OF_RECORD);
         file.seek(currentPos);
         file.writeBytes(tickets);

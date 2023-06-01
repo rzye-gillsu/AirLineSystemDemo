@@ -42,11 +42,11 @@ public class TicketControl {
      */
 
 
-    public void makeNewTicket(Passenger passenger, String flightId) throws IOException {
+    public void makeNewTicket(String flightId) throws IOException {
         if (flightsFile.search(flightId, 0)) {
             if (setParametersWhenTicketIsAdded()) {
                 ticketsFile.setSeek(ticketsFile.length());
-                ticketsFile.writeRecord(new Ticket(flightId, passenger.getUsername()).toString());
+                ticketsFile.writeRecord(new Ticket(flightId, passenger.getUsername().trim()).toString());
             }
         } else
             passengerMenu.messages(1);

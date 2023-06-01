@@ -47,7 +47,7 @@ public class PassengerMenu {
         return input.next();
     }
 
-    public String getFlightId(String id) {
+    public String getId(String id) {
         System.out.printf("The %s: ", id);
         return input.next();
     }
