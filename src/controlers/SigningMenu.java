@@ -37,13 +37,21 @@ public class SigningMenu {
         String username = signingMenu.username();
         String password = signingMenu.password();
         if (userIsValid(username, password)) {
-            passengersFile.setSeek(passengersFile.length()); // i changed here.
+            passengersFile.setSeek(passengersFile.length());
             passengersFile.writeRecord(String.format("%20s", username).concat(String.format("%20s", password))
                     .concat(String.format("%20d", 0)).concat(String.format("%20d", 0)));
         }
     }
 
-
+    /**
+     * Checks 1. if user is signing up as admin, cause admin is predefined.
+     *        2. if there isn't any other user with the same username.
+     *        3. if password has a length of longer than 4.
+     * @param username
+     * @param password
+     * @return true if user is valid.
+     * @throws IOException
+     */
     private boolean userIsValid(String username, String password) throws IOException {
         if (username.equals("Admin") && password.equals("Admin")) {
             signingMenu.messages(0);
@@ -66,6 +74,12 @@ public class SigningMenu {
         checkSignIn(username, password);
     }
 
+    /**
+     * Checks if user is admin or a passenger.
+     * @param username
+     * @param password
+     * @throws IOException
+     */
     private void checkSignIn(String username, String password) throws IOException {
         if (username.equals("Admin") && password.equals("Admin")) {
             signingMenu.messages(2);

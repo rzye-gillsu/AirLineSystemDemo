@@ -58,6 +58,7 @@ public class PassengerMenu {
             case 1 -> System.out.println("\n!!!Submitted flightId does not exist.\n");
             case 2 -> System.out.println("\n!!!Your charge is not enough!\n");
             case 3 -> System.out.println("\n!!!Submitted ticketId does not exist.\n");
+            case 4 -> System.out.println("\n!!!This flight no longer has any seats available.\n");
         }
     }
 

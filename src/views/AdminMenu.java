@@ -78,10 +78,8 @@ public class AdminMenu {
         return input.next();
     }
 
-    public void messages(int messageNumber) {
-        switch (messageNumber) {
-            case 0 -> System.out.println("\n!!!Submitted flightId does not exist.\n");
-        }
+    public void messages() {
+        System.out.println("\n!!!Submitted flightId does not exist.\n");
     }
 
     public void printFlightHeader() {

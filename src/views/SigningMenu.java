@@ -30,7 +30,6 @@ public class SigningMenu {
         return input.next();
     }
 
-    // what is the message appearing after signing out from the admin menu.
     public void messages(int messageNumber) {
         switch (messageNumber) {
             case 0 -> System.out.println("\n!!!You are predefined. Sign in to continue...\n");

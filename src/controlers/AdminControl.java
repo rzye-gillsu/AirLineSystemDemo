@@ -76,7 +76,7 @@ public class AdminControl {
         String flightId = adminMenu.flightIdToUpdate();
         Flight flight = new Flight();
         if (!flightsFile.search(flightId, 0, "flightId"))
-            adminMenu.messages(0);
+            adminMenu.messages();
         else {
             flight = flightsFile.readRecord(flight);
 
@@ -124,7 +124,7 @@ public class AdminControl {
                     flight.setSeat(Integer.parseInt(check));
                 }
             }
-            flightsFile.setSeek(flightsFile.getCursor() - FlightsFile.SIZE_OF_RECORD);
+            flightsFile.setSeek(flightsFile.getCursor() - flightsFile.SIZE_OF_RECORD);
             flightsFile.writeRecord(flight.toString());
         }
         ticketControl.notifyUsers(flightId);
@@ -136,7 +136,7 @@ public class AdminControl {
             ticketControl.notifyUsers(flightId, flight.getPrice());
             flightsFile.removeRecord(String.format("%20s", flightId));
         }
-        else adminMenu.messages(0);
+        else adminMenu.messages();
     }
 
     private void flightSchedule() throws IOException {

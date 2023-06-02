@@ -1,35 +1,91 @@
 package controlers.database;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
-public interface Database<T> {
-    int FIX = 20;
+public abstract class Database<T> {
+    protected File f;
+    protected RandomAccessFile file;
 
-    void writeRecord(String str) throws IOException;
-    T readRecord(T t) throws IOException;
+    protected final int FIX = 20;
+    public final int SIZE_OF_RECORD;
+    protected T t;
 
-    void writeString(String username) throws IOException;
+    public Database(String path, int SIZE_OF_RECORD, T t) throws IOException {
+        f = new File(path);
+        f.createNewFile();
+        file = new RandomAccessFile(f, "rwd");
+        this.SIZE_OF_RECORD = SIZE_OF_RECORD;
+        this.t = t;
+    }
 
-    boolean search(String str, long pos, String state) throws IOException;
+    public void writeRecord(String str) throws IOException {
+        file.writeBytes(str);
+        file.writeByte('\n');
+    }
 
-//    void update(String str, String state) throws IOException;
+    public abstract T readRecord(T t) throws IOException;
 
-    String readRecords(long seek, int n) throws IOException;
-    String readRecords(long seek) throws IOException;
+    public void writeString(String str) throws IOException {
+        file.writeBytes(fixStringToWrite(str));
+    }
 
-    void removeRecord(String str) throws IOException;
+    public abstract boolean search(String str, long pos, String state) throws IOException;
 
-    void setSeek(long bytes) throws IOException;
+    protected String readRecords(long seek, int n) throws IOException {
+        file.seek(seek);
+        StringBuilder str = new StringBuilder();
+        if (n == -1) {
+            while (file.getFilePointer() < file.length()) {
+                str.append(readRecord(t).toString());
+                str.append("\n");
+            }
+        } else if (n > 0) {
+            while (n > 0) {
+                str.append(readRecord(t).toString());
+                n--;
+            }
+        } else {
+            return null;
+        }
+        return str.toString();
+    }
+    protected String readRecords(long seek) throws IOException {
+        return readRecords(seek, -1);
+    }
 
-    long getCursor() throws IOException;
+    public void removeRecord(String flightId) throws IOException {
+        long currentPos = file.getFilePointer();
+        String flights = readRecords(currentPos + SIZE_OF_RECORD);
+        file.seek(currentPos);
+        file.writeBytes(flights);
+        file.setLength(file.length() - SIZE_OF_RECORD);
+    }
 
-    long length() throws IOException;
+    public void setSeek(long bytes) throws IOException {
+        file.seek(bytes);
+    }
 
-    int numberOfRecords() throws IOException;
+    public long getCursor() throws IOException {
+        return file.getFilePointer();
+    }
 
-    String fixStringToWrite(String str);
+    public long length() throws IOException {
+        return file.length();
+    }
 
-    String readFixedString() throws IOException;
+    public String fixStringToWrite(String str) {
+        return String.format("%20s", str).substring(0, FIX);
+    }
 
-    void close() throws IOException;
+    public String readFixedString() throws IOException {
+        byte[] bytes = new byte[FIX];
+        file.read(bytes);
+        return (new String(bytes)).trim();
+    }
+
+    public void close() throws IOException {
+        file.close();
+    }
 }

@@ -1,7 +1,5 @@
 package controlers;
 
-import java.util.Scanner;
-
 // one err to be fixed: its controller but im printing here!
 
 public class InputHandler {
@@ -13,16 +11,18 @@ public class InputHandler {
 
     private InputHandler(){}
 
+    private views.InputHandler inputHandler = views.InputHandler.getInstance();
+
     public int checkAdminMenuInput(String option) {
         if (isInteger(option)) {
             int o = Integer.parseInt(option);
             if ((o >= 0) && (o <= 4)) {
                 return o;
             }
-            System.out.println("\n!!!Choose an input in the range 0-4");
+            inputHandler.adminMenuMessages(0, 0, 4);
             return -1;
         }
-        System.out.println("\n!!!Choose a valid integer type input in the range 0-4");
+        inputHandler.adminMenuMessages(1, 0, 4);
         return -2;
     }
 
@@ -32,10 +32,10 @@ public class InputHandler {
             if ((o >= 0) && (o <= 5)) {
                 return o;
             }
-            System.out.println("\n!!!Choose an input in the range 0-5");
+            inputHandler.adminMenuMessages(0, 0, 5);
             return -1;
         }
-        System.out.println("\n!!!Choose a valid integer type input in the range 0-5");
+        inputHandler.adminMenuMessages(1, 0, 5);
         return -2;
     }
 
@@ -45,10 +45,10 @@ public class InputHandler {
             if ((o >= 0) && (o < 3)) {
                 return o;
             }
-            System.out.println("\n!!!Choose an input in the range 0-2");
+            inputHandler.adminMenuMessages(0, 0, 2);
             return -1;
         }
-        System.out.println("\n!!!Choose a valid integer type input in the range 0-2");
+        inputHandler.adminMenuMessages(1, 0, 5);
         return -2;
     }
 
@@ -58,10 +58,10 @@ public class InputHandler {
             if ((o >= 0) && (o <= 6)) {
                 return o;
             }
-            System.out.println("\n!!!Choose an input in the range 0-4");
+            inputHandler.adminMenuMessages(0, 0, 6);
             return -1;
         }
-        System.out.println("\n!!!Choose a valid integer type input in the range 0-4");
+        inputHandler.adminMenuMessages(1, 0, 6);
         return -2;
     }
 
@@ -69,7 +69,7 @@ public class InputHandler {
         if (date.matches("\\d{4}-\\d{2}-\\d{2}")) {
             return true;
         }
-        System.out.println("\n!!!Not a valid date type. Enter it as xxxx-xx-xx");
+        inputHandler.dateTimeMessage("date");
         return false;
     }
 
@@ -77,7 +77,7 @@ public class InputHandler {
         if (time.matches("\\d{2}:\\d{2}")) {
             return true;
         }
-        System.out.println("\n!!!Not a valid time type. Enter it as xx:xx");
+        inputHandler.dateTimeMessage("time");
         return false;
     }
 
@@ -86,6 +86,7 @@ public class InputHandler {
             Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
+            inputHandler.integerMessage();
             return false;
         }
     }

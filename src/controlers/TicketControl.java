@@ -35,15 +35,6 @@ public class TicketControl {
         this.passenger = passenger;
     }
 
-    /**
-     * here I have to read flights based on the flightId we get from passengerControl.
-     * here we also access the user's array of tickets, so it means we should get user from passengerControl
-     * somewhere here as well.
-     * each flight we read from the file that the user want to reserve must be saved into the ticket's array.
-     * But should it be saved as an object or as a string? by the way we don't need to change the flight which is reserved.
-     */
-
-
     public void makeNewTicket(String flightId) throws IOException {
         if (flightsFile.search(flightId, 0, "flightId")) {
             if (setParametersWhenTicketIsAdded()) {
@@ -54,13 +45,23 @@ public class TicketControl {
             passengerMenu.messages(1);
     }
 
+    /**
+     * Lessons the flight seats by 1,
+     * and lesson the users charge when buying the ticket.
+     * @return true it charge is enough and reserving the flight is possible.
+     * @throws IOException
+     */
     private boolean setParametersWhenTicketIsAdded() throws IOException {
         flight = flightsFile.readRecord(flight);
+        if (flight.getSeat() == 0) {
+            passengerMenu.messages(4);
+            return false;
+        }
         if (passenger.getCharge() < flight.getPrice()) {
             passengerMenu.messages(2);
             return false;
         } else {
-            flight.setSeat(flight.getSeat() - 1); // check if flight's seats is not zero.
+            flight.setSeat(flight.getSeat() - 1);
             passenger.setCharge(passenger.getCharge() - flight.getPrice());
 
             flightsFile.search(flight.getFlightId(), 0, "flightId");
@@ -81,6 +82,12 @@ public class TicketControl {
         else passengerMenu.messages(3);
     }
 
+    /**
+     * Adds the flight seats by 1,
+     * and Adds the users charge when buying the ticket.
+     * @param pos indicates where ticket should be overwritten.
+     * @throws IOException
+     */
     private void setParametersWhenTicketIsCancelled(long pos) throws IOException {
         ticket = ticketsFile.readRecord(ticket);
 
@@ -185,7 +192,7 @@ public class TicketControl {
                 passengersFile.setSeek(passengerPos);
                 passengersFile.writeRecord(passenger.toString());
             }
-            ticketsFile.setSeek(ticketsPos);
+            ticketsFile.setSeek(ticketsPos + ticketsFile.SIZE_OF_RECORD);
         }
     }
 

@@ -2,7 +2,6 @@ package controlers;
 
 import controlers.database.PassengersFile;
 import models.Passenger;
-import views.AdminMenu;
 import views.PassengerMenu;
 
 import java.io.IOException;
@@ -47,6 +46,11 @@ public class PassengerControl {
 
     }
 
+    /**
+     * When admin removes or updates a flight,
+     * users that have that flightId reserved, are notified.
+     * @throws IOException
+     */
     private void notifyUser() throws IOException {
         passengerMenu.printNotification(passenger.getNotifyUser());
         if (passenger.getNotifyUser() > 0) {
