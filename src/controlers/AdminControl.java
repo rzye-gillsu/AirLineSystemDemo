@@ -7,8 +7,10 @@ import views.AdminMenu;
 import java.io.IOException;
 
 public class AdminControl {
-    private AdminMenu adminMenu = new AdminMenu();
+    private AdminMenu adminMenu = AdminMenu.getInstance();
     private FlightsFile flightsFile = FlightsFile.getInstance();
+    private TicketControl ticketControl = TicketControl.getInstance();
+    private Flight flight = new Flight();
 
     public AdminControl() throws IOException {
     }
@@ -73,7 +75,7 @@ public class AdminControl {
     private void update() throws IOException {
         String flightId = adminMenu.flightIdToUpdate();
         Flight flight = new Flight();
-        if (!flightsFile.search(String.format("%20s", flightId), 0))
+        if (!flightsFile.search(flightId, 0))
             adminMenu.messages(0);
         else {
             flight = flightsFile.readRecord(flight);
@@ -122,25 +124,25 @@ public class AdminControl {
                     flight.setSeat(Integer.parseInt(check));
                 }
             }
-
             flightsFile.setSeek(flightsFile.getCursor() - FlightsFile.SIZE_OF_RECORD);
             flightsFile.writeRecord(flight.toString());
         }
+        ticketControl.notifyUsers(flightId);
     }
 
     private void remove() throws IOException {
         String flightId = adminMenu.remove();
-//        System.out.println(flightsFile.search(flightId));
-        if (flightsFile.search(flightId, 0))
+        if (flightsFile.search(flightId, 0)) {
+            flight = flightsFile.readRecord(flight);
             flightsFile.removeRecord(String.format("%20s", flightId));
-        else
-            adminMenu.messages(0);
+        }
+        else adminMenu.messages(0);
+        ticketControl.notifyUsers(flightId, flight.getPrice());
     }
 
     private void flightSchedule() throws IOException {
         adminMenu.printFlightHeader();
         flightsFile.setSeek(0);
-        Flight flight = new Flight();
         while (flightsFile.getCursor() < flightsFile.length()) {
             flight = flightsFile.readRecord(flight);
             adminMenu.printFlight(flight);

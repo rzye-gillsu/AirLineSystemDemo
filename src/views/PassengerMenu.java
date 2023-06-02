@@ -69,4 +69,20 @@ public class PassengerMenu {
     public void printTicket(Ticket ticket, Flight flight) {
         System.out.println(String.format("%20s", ticket.getTicketId()) + flight);
     }
+
+    public void dropOutSearchFilters() {
+        System.out.println("Enter Zero-> '0' for filters you don't wanna include.");
+    }
+
+    public void searchChart() {
+        System.out.printf("\n\tSearch Results:\n%20s%20s%20s%20s%20s%20s%20s\n%s\n",
+                "FlightId", "Origin", "Destination", "Date", "Time", "Price", "Seat", "-".repeat(140));
+    }
+
+    public void printNotification(int notifyUser) {
+        System.out.printf("\sYou have %d notification(s).\n", notifyUser);
+        if (notifyUser > 0)
+            System.out.printf("\t-> %d flight(s) is(are) removed from your reservation list, duo to admins policies.\n", notifyUser);
+        System.out.println();
+    }
 }

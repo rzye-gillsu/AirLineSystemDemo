@@ -5,6 +5,9 @@ import models.Flight;
 import java.util.Scanner;
 
 public class AdminMenu {
+    private static AdminMenu instance = new AdminMenu();
+    public static AdminMenu getInstance() { return instance; }
+    private AdminMenu() {}
     Scanner input = new Scanner(System.in);
 
     public String menu() {

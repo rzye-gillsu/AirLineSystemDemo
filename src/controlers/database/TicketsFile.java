@@ -41,14 +41,10 @@ public class TicketsFile implements Database<Ticket> {
 
     @Override
     public Ticket readRecord(Ticket ticket) throws IOException {
-        ticket.setUsername(readFixedString().trim());
-//            System.out.println(file.getFilePointer());
-        ticket.setTicketId(readFixedString().trim());
-//            System.out.println(file.getFilePointer());
-        ticket.setFlightId(readFixedString().trim());
-//            System.out.println(file.getFilePointer());
+        ticket.setUsername(readFixedString());
+        ticket.setTicketId(readFixedString());
+        ticket.setFlightId(readFixedString());
         file.readLine();
-//            System.out.println(file.getFilePointer());
         return ticket;
     }
 
@@ -59,15 +55,15 @@ public class TicketsFile implements Database<Ticket> {
 
     @Override
     public boolean search(String str, long pos) throws IOException {
-        // a problem with contains key that I have is that if you enter yaz it counts yazd as well.
-        // one way to solve the issue and yet using contains method is to add spaces before and after the input.
+        int elements = 3;
         file.seek(pos);
         String line;
         while ((line = file.readLine()) != null)
-            if (line.contains(str)) {
-                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
-                return true;
-            }
+            for (int i = 0; i < elements; i++)
+                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
+                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                    return true;
+                }
         return false;
     }
 
@@ -135,7 +131,7 @@ public class TicketsFile implements Database<Ticket> {
     public String readFixedString() throws IOException {
         byte[] bytes = new byte[FIX];
         file.read(bytes);
-        return new String(bytes);
+        return (new String(bytes)).trim();
     }
 
     @Override

@@ -7,10 +7,18 @@ public class Passenger {
     private String username;
     private String password;
     private int charge;
-    private List<Ticket> tickets;
+    private int notifyUser;
     public Passenger() {
-        this.tickets = new ArrayList<>();
+        notifyUser = 0;
         charge = 0;
+    }
+
+    public int getNotifyUser() {
+        return notifyUser;
+    }
+
+    public void setNotifyUser(int notifyUser) {
+        this.notifyUser = notifyUser;
     }
 
     public int getCharge() {
@@ -19,14 +27,6 @@ public class Passenger {
 
     public void setCharge(int charge) {
         this.charge = charge;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 
     public String getUsername() {
@@ -47,6 +47,6 @@ public class Passenger {
 
     @Override
     public String toString() {
-        return String.format("%20s%20s%20d", username, password, charge);
+        return String.format("%20s%20s%20d%20d", username, password, charge, notifyUser);
     }
 }

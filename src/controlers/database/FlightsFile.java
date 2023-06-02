@@ -57,14 +57,15 @@ public class FlightsFile implements Database<Flight> {
 
     @Override
     public boolean search(String str, long pos) throws IOException {
-        // naiveSearch
-        file.seek(0);
+        int elements = 7;
+        file.seek(pos);
         String line;
         while ((line = file.readLine()) != null)
-            if (line.contains(str)) {
-                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
-                return true;
-            }
+            for (int i = 0; i < elements; i++)
+                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
+                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                    return true;
+                }
         return false;
 //         seek cursor is not set.
 
@@ -123,7 +124,6 @@ public class FlightsFile implements Database<Flight> {
     @Override
     public void removeRecord(String flightId) throws IOException {
         long currentPos = file.getFilePointer();
-        System.out.println(currentPos);
         String flights = readRecords(currentPos + SIZE_OF_RECORD);
         file.seek(currentPos);
         file.writeBytes(flights);
@@ -159,7 +159,7 @@ public class FlightsFile implements Database<Flight> {
     public String readFixedString() throws IOException {
         byte[] bytes = new byte[FIX];
         file.read(bytes);
-        return new String(bytes);
+        return (new String(bytes)).trim();
     }
 
     @Override

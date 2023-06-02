@@ -2,6 +2,7 @@ package controlers;
 
 import controlers.database.PassengersFile;
 import models.Passenger;
+import views.AdminMenu;
 import views.PassengerMenu;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.io.IOException;
 public class PassengerControl {
     private PassengersFile passengersFile = PassengersFile.getInstance();
     private TicketControl ticketControl = TicketControl.getInstance();
-    PassengerMenu passengerMenu = PassengerMenu.getInstance();
+    private PassengerMenu passengerMenu = PassengerMenu.getInstance();
 
     Passenger passenger;
 
@@ -23,6 +24,7 @@ public class PassengerControl {
 
     public void menu(Passenger passenger) throws IOException {
         setPassenger(passenger);
+        notifyUser();
         sign_out:
         while (true) {
             int option = -1;
@@ -45,9 +47,18 @@ public class PassengerControl {
 
     }
 
+    private void notifyUser() throws IOException {
+        passengerMenu.printNotification(passenger.getNotifyUser());
+        if (passenger.getNotifyUser() > 0) {
+            passenger.setNotifyUser(0);
+            passengersFile.search(passenger.getUsername(), 0);
+            passengersFile.writeRecord(passenger.toString());
+        }
+    }
+
     private void changePassword() throws IOException {
-        passengerMenu.printPreviousPassword(passenger.getPassword().trim());
-        passengersFile.search(passenger.toString(), 0);
+        passengerMenu.printPreviousPassword(passenger.getPassword());
+        passengersFile.search(passenger.getUsername(), 0);
         String password = passengerMenu.password();
         if (password.length() < 4) {
             passengerMenu.messages(0);
@@ -57,8 +68,9 @@ public class PassengerControl {
         passengersFile.writeRecord(passenger.toString());
     }
 
-    private void searchTicket() {
-
+    private void searchTicket() throws IOException {
+        passengerMenu.dropOutSearchFilters();
+        ticketControl.searchTicket();
     }
 
     private void bookTicket() throws IOException {
@@ -71,7 +83,7 @@ public class PassengerControl {
     }
 
     private void addCharge() throws IOException {
-        passengersFile.search(passenger.toString(), 0);
+        passengersFile.search(passenger.getUsername(), 0);
         passengerMenu.previousCharge(passenger.getCharge());
         String charge = passengerMenu.charge();
         if (!InputHandler.getInstance().isInteger(charge))

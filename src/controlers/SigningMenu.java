@@ -35,17 +35,21 @@ public class SigningMenu {
     private void signingUp() throws IOException {
         String username = signingMenu.username();
         String password = signingMenu.password();
-        passengersFile.setSeek(passengersFile.length());
         if (userIsValid(username, password)) {
+            passengersFile.setSeek(passengersFile.length()); // i changed here.
             passengersFile.writeRecord(String.format("%20s", username).concat(String.format("%20s", password))
-                    .concat(String.format("%20d", 0)));
+                    .concat(String.format("%20d", 0)).concat(String.format("%20d", 0)));
         }
     }
 
 
-    private boolean userIsValid(String username, String password) {
+    private boolean userIsValid(String username, String password) throws IOException {
         if (username.equals("Admin") && password.equals("Admin")) {
             signingMenu.messages(0);
+            return false;
+        }
+        if (passengersFile.search(username, 0)) {
+            signingMenu.messages(4);
             return false;
         }
         if (password.length() < 4) {
@@ -68,8 +72,8 @@ public class SigningMenu {
             return;
         }
         Passenger passenger = new Passenger();
-        String user = String.format("%20s", username).concat(String.format("%20s", password));
-        if (passengersFile.search(user, 0)) {
+        String user = username.concat(String.format("%20s", password));
+        if (passengersFile.naiveSearch(user, 0)) {
             signingMenu.welcomeUser(username);
             passenger = passengersFile.readRecord(passenger);
             (new PassengerControl()).menu(passenger);

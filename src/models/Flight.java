@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Flight {
     private String flightId;
     private String origin;
@@ -82,5 +84,22 @@ public class Flight {
     public String toString() {
         return String.format("%20s%20s%20s%20s%20s%20d%20d",
                 flightId, origin, destination, date, time, price, seat);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return price == flight.price || seat == flight.seat ||
+                Objects.equals(flightId, flight.flightId) ||
+                Objects.equals(origin, flight.origin) ||
+                Objects.equals(destination, flight.destination) ||
+                Objects.equals(date, flight.date) && Objects.equals(time, flight.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flightId, origin, destination, date, time, price, seat);
     }
 }

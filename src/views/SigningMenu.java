@@ -37,6 +37,7 @@ public class SigningMenu {
             case 1 -> System.out.println("\n!!!Password must contain at least 4 characters. Try it again.\n");
             case 2 -> System.out.println("\nWelcome back Admin!\n");
             case 3 -> System.out.println("\n!!! Passenger with given username and password is not found!\n");
+            case 4 -> System.out.println("\n!!! This username already exists.\n");
         }
     }
 
