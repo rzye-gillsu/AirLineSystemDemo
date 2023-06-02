@@ -10,7 +10,7 @@ public interface Database<T> {
 
     void writeString(String username) throws IOException;
 
-    boolean search(String str, long pos) throws IOException;
+    boolean search(String str, long pos, String state) throws IOException;
 
 //    void update(String str, String state) throws IOException;
 

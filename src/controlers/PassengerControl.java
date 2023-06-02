@@ -51,14 +51,14 @@ public class PassengerControl {
         passengerMenu.printNotification(passenger.getNotifyUser());
         if (passenger.getNotifyUser() > 0) {
             passenger.setNotifyUser(0);
-            passengersFile.search(passenger.getUsername(), 0);
+            passengersFile.search(passenger.getUsername(), 0, "username");
             passengersFile.writeRecord(passenger.toString());
         }
     }
 
     private void changePassword() throws IOException {
         passengerMenu.printPreviousPassword(passenger.getPassword());
-        passengersFile.search(passenger.getUsername(), 0);
+        passengersFile.search(passenger.getUsername(), 0, "username");
         String password = passengerMenu.password();
         if (password.length() < 4) {
             passengerMenu.messages(0);
@@ -83,7 +83,7 @@ public class PassengerControl {
     }
 
     private void addCharge() throws IOException {
-        passengersFile.search(passenger.getUsername(), 0);
+        passengersFile.search(passenger.getUsername(), 0, "username");
         passengerMenu.previousCharge(passenger.getCharge());
         String charge = passengerMenu.charge();
         if (!InputHandler.getInstance().isInteger(charge))

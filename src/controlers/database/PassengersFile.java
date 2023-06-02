@@ -54,17 +54,32 @@ public class PassengersFile implements Database<Passenger> {
     }
 
     @Override
-    public boolean search(String str, long pos) throws IOException {
-        int elements = 4;
+    public boolean search(String str, long pos, String state) throws IOException {
         file.seek(pos);
         String line;
-        while ((line = file.readLine()) != null)
-            for (int i = 0; i < elements; i++)
-                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
-                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
-                    return true;
-                }
+        while ((line = file.readLine()) != null) {
+            switch (state) {
+                case "username" -> line = line.substring(0, FIX);
+                case "password" -> line = line.substring(FIX, FIX * 2);
+                case "charge" -> line = line.substring(FIX * 2, FIX * 3);
+                case "notifyUser" -> line = line.substring(FIX * 3, FIX * 4);
+            }
+            if (line.trim().equals(str)) {
+                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                return true;
+            }
+        }
         return false;
+//        int elements = 4;
+//        file.seek(pos);
+//        String line;
+//        while ((line = file.readLine()) != null)
+//            for (int i = 0; i < elements; i++)
+//                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
+//                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+//                    return true;
+//                }
+//        return false;
     }
 
     public boolean naiveSearch(String str, long pos) throws IOException {

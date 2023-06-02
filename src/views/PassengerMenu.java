@@ -71,7 +71,7 @@ public class PassengerMenu {
     }
 
     public void dropOutSearchFilters() {
-        System.out.println("Enter Zero-> '0' for filters you don't wanna include.");
+        System.out.println("Enter '0' for filters you don't wanna include.");
     }
 
     public void searchChart() {

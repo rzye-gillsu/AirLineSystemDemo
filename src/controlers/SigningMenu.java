@@ -1,8 +1,8 @@
 package controlers;
 
-import controlers.database.Database;
 import controlers.database.FlightsFile;
 import controlers.database.PassengersFile;
+import controlers.database.TicketsFile;
 import models.Passenger;
 
 import java.io.IOException;
@@ -28,6 +28,7 @@ public class SigningMenu {
         }
         FlightsFile.getInstance().close();
         PassengersFile.getInstance().close();
+        TicketsFile.getInstance().close();
         Thread.sleep(500);
         System.exit(0);
     }
@@ -48,7 +49,7 @@ public class SigningMenu {
             signingMenu.messages(0);
             return false;
         }
-        if (passengersFile.search(username, 0)) {
+        if (passengersFile.search(username, 0, "username")) {
             signingMenu.messages(4);
             return false;
         }

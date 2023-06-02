@@ -54,16 +54,20 @@ public class TicketsFile implements Database<Ticket> {
     }
 
     @Override
-    public boolean search(String str, long pos) throws IOException {
-        int elements = 3;
+    public boolean search(String str, long pos, String state) throws IOException {
         file.seek(pos);
         String line;
-        while ((line = file.readLine()) != null)
-            for (int i = 0; i < elements; i++)
-                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
-                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
-                    return true;
-                }
+        while ((line = file.readLine()) != null) {
+            switch (state) {
+                case "username" -> line = line.substring(0, FIX);
+                case "ticketId" -> line = line.substring(FIX, FIX * 2);
+                case "flightId" -> line = line.substring(FIX * 2, FIX * 3);
+            }
+            if (line.trim().equals(str)) {
+                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                return true;
+            }
+        }
         return false;
     }
 

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Flight {
     private String flightId;
@@ -11,11 +12,13 @@ public class Flight {
     private int price;
     private int seat;
 
+    private Random random = new Random(System.currentTimeMillis());
+
     public Flight() {
     }
 
-    public Flight(String flightId, String origin, String destination, String date, String time, int price, int seat) {
-        this.flightId = flightId;
+    public Flight(String origin, String destination, String date, String time, int price, int seat) {
+        this.flightId = createFlightId();
         this.origin = origin;
         this.destination = destination;
         this.date = date;
@@ -26,6 +29,15 @@ public class Flight {
 
     public void setFlightId(String flightId) {
         this.flightId = flightId;
+    }
+
+    public String createFlightId() {
+        return String.format("HW_F%s", generate6DigitNumber());
+    }
+    private String generate6DigitNumber() {
+        StringBuilder num = new StringBuilder();
+        for (int i = 0; i < 6; i++) num.append(random.nextInt(9));
+        return num.toString();
     }
 
     public void setOrigin(String origin) {

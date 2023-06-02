@@ -26,7 +26,7 @@ public class Ticket {
     }
 
     public void createTicketId() {
-        this.ticketId = username + "_" + generate6DigitNumber() + "_" + flightId;
+        this.ticketId = username + "_" + generate6DigitNumber();
     }
 
     private String generate6DigitNumber() {

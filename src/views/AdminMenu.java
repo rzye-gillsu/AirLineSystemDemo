@@ -78,14 +78,9 @@ public class AdminMenu {
         return input.next();
     }
 
-    public String remove() {
-        System.out.print("Enter the flightId you wanna remove: ");
-        return input.next();
-    }
-
     public void messages(int messageNumber) {
         switch (messageNumber) {
-            case 0 -> System.out.println("\n!!!Submitted flightId does not exist.");
+            case 0 -> System.out.println("\n!!!Submitted flightId does not exist.\n");
         }
     }
 

@@ -38,7 +38,7 @@ public class AdminControl {
     private void add() throws IOException {
 
         StringBuilder flight = new StringBuilder();
-        flight.append(String.format("%20s", adminMenu.flightId()));
+        flight.append(String.format("%20s", this.flight.createFlightId()));
         flight.append(String.format("%20s", adminMenu.origin()));
         flight.append(String.format("%20s", adminMenu.destination()));
         String check = null;
@@ -75,7 +75,7 @@ public class AdminControl {
     private void update() throws IOException {
         String flightId = adminMenu.flightIdToUpdate();
         Flight flight = new Flight();
-        if (!flightsFile.search(flightId, 0))
+        if (!flightsFile.search(flightId, 0, "flightId"))
             adminMenu.messages(0);
         else {
             flight = flightsFile.readRecord(flight);
@@ -131,13 +131,12 @@ public class AdminControl {
     }
 
     private void remove() throws IOException {
-        String flightId = adminMenu.remove();
-        if (flightsFile.search(flightId, 0)) {
-            flight = flightsFile.readRecord(flight);
+        String flightId = adminMenu.flightId();
+        if (flightsFile.search(flightId, 0, "flightId")) {
+            ticketControl.notifyUsers(flightId, flight.getPrice());
             flightsFile.removeRecord(String.format("%20s", flightId));
         }
         else adminMenu.messages(0);
-        ticketControl.notifyUsers(flightId, flight.getPrice());
     }
 
     private void flightSchedule() throws IOException {

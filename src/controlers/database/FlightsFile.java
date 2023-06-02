@@ -56,17 +56,38 @@ public class FlightsFile implements Database<Flight> {
     }
 
     @Override
-    public boolean search(String str, long pos) throws IOException {
-        int elements = 7;
+    public boolean search(String str, long pos, String state) throws IOException {
         file.seek(pos);
         String line;
-        while ((line = file.readLine()) != null)
-            for (int i = 0; i < elements; i++)
-                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
-                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
-                    return true;
-                }
+        while ((line = file.readLine()) != null) {
+            switch (state) {
+                case "flightId" -> line = line.substring(0, FIX);
+                case "origin" -> line = line.substring(FIX, FIX * 2);
+                case "destination" -> line = line.substring(FIX * 2, FIX * 3);
+                case "date" -> line = line.substring(FIX * 3, FIX * 4);
+                case "time" -> line = line.substring(FIX * 4, FIX * 5);
+                case "price" -> line = line.substring(FIX * 5, FIX * 6);
+                case "seat" -> line = line.substring(FIX * 6, FIX * 7);
+            }
+            if (line.trim().equals(str)) {
+                file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+                return true;
+            }
+        }
         return false;
+    }
+
+    public boolean search2(String str, long pos, String state) throws IOException {
+        //        int elements = 7;
+//        file.seek(pos);
+//        String line;
+//        while ((line = file.readLine()) != null)
+//            for (int i = 0; i < elements; i++)
+//                if (line.substring(i * FIX, (i + 1) * FIX).trim().equals(str)) {
+//                    file.seek(file.getFilePointer() - SIZE_OF_RECORD);
+//                    return true;
+//                }
+//        return false;
 //         seek cursor is not set.
 
         // reverseSearch
@@ -79,19 +100,6 @@ public class FlightsFile implements Database<Flight> {
 //                return true;
 //            }
 //        }
-//        return false;
-    }
-
-    public boolean search2(String str) throws IOException {
-        file.seek(0);
-        while (file.getFilePointer() < file.length()) {
-            byte[] bytes = new byte[FIX];
-            file.read(bytes);
-            if ((new String(bytes)).trim().equals(str)) {
-                file.seek(file.getFilePointer() - FIX);
-                return true;
-            }
-        }
         return false;
     }
 

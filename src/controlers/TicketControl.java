@@ -45,7 +45,7 @@ public class TicketControl {
 
 
     public void makeNewTicket(String flightId) throws IOException {
-        if (flightsFile.search(flightId, 0)) {
+        if (flightsFile.search(flightId, 0, "flightId")) {
             if (setParametersWhenTicketIsAdded()) {
                 ticketsFile.setSeek(ticketsFile.length());
                 ticketsFile.writeRecord(new Ticket(flightId, passenger.getUsername().trim()).toString());
@@ -63,16 +63,16 @@ public class TicketControl {
             flight.setSeat(flight.getSeat() - 1); // check if flight's seats is not zero.
             passenger.setCharge(passenger.getCharge() - flight.getPrice());
 
-            flightsFile.search(flight.getFlightId(), 0);
+            flightsFile.search(flight.getFlightId(), 0, "flightId");
             flightsFile.writeRecord(flight.toString());
-            passengersFile.search(passenger.getUsername(), 0);
+            passengersFile.search(passenger.getUsername(), 0, "username");
             passengersFile.writeRecord(passenger.toString());
         }
         return true;
     }
 
     public void ticketCancellation(String ticketId) throws IOException {
-        if (ticketsFile.search(ticketId, 0)) {
+        if (ticketsFile.search(ticketId, 0, "ticketId")) {
             long pos = ticketsFile.getCursor();
             setParametersWhenTicketIsCancelled(pos);
             ticketsFile.setSeek(pos);
@@ -84,8 +84,7 @@ public class TicketControl {
     private void setParametersWhenTicketIsCancelled(long pos) throws IOException {
         ticket = ticketsFile.readRecord(ticket);
 
-        flightsFile.search(ticket.getFlightId(), 0);
-        System.out.println(ticket.getFlightId());
+        flightsFile.search(ticket.getFlightId(), 0, "flightId");
         long flightPos = flightsFile.getCursor();
         flight = flightsFile.readRecord(flight);
         flight.setSeat(flight.getSeat() + 1);
@@ -93,7 +92,7 @@ public class TicketControl {
         flightsFile.writeRecord(flight.toString());
 
         passenger.setCharge(passenger.getCharge() + flight.getPrice());
-        passengersFile.search(passenger.getUsername(), 0);
+        passengersFile.search(passenger.getUsername(), 0, "username");
         passengersFile.writeRecord(passenger.toString());
     }
 
@@ -101,9 +100,9 @@ public class TicketControl {
         ticketsFile.setSeek(0);
         Ticket ticket = new Ticket();
         while (ticketsFile.getCursor() < ticketsFile.length())
-            if (ticketsFile.search(passenger.getUsername(), ticketsFile.getCursor())) {
+            if (ticketsFile.search(passenger.getUsername(), ticketsFile.getCursor(), "username")) {
                 ticket = ticketsFile.readRecord(ticket);
-                flightsFile.search(ticket.getFlightId(), 0);
+                flightsFile.search(ticket.getFlightId(), 0, "flightId");
                 flight = flightsFile.readRecord(flight);
                 passengerMenu.printTicket(ticket, flight);
             }
@@ -175,9 +174,9 @@ public class TicketControl {
         long passengerPos = 0;
         while (ticketsFile.getCursor() < ticketsFile.length()) {
             long ticketsPos = ticketsFile.getCursor();
-            if (ticketsFile.search(flightId, ticketsFile.getCursor())) {
+            if (ticketsFile.search(flightId, ticketsFile.getCursor(), "flightId")) {
                 ticket = ticketsFile.readRecord(ticket);
-                passengersFile.search(ticket.getUsername(), 0);
+                passengersFile.search(ticket.getUsername(), 0, "username");
                 passengerPos = passengersFile.getCursor();
                 passenger = passengersFile.readRecord(passenger);
                 passenger.setNotifyUser(passenger.getNotifyUser() + 1);
@@ -193,7 +192,7 @@ public class TicketControl {
     private void removingTicket(String flightId, int price) throws IOException {
         if (price == 0) ticketCancellation(flightId);
         else {
-            if (ticketsFile.search(flightId, 0))
+            if (ticketsFile.search(flightId, 0, "flightId"))
                 ticketsFile.removeRecord(flightId);
             passenger.setCharge(passenger.getCharge() + price);
         }
